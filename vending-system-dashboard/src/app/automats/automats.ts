@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-automats',
+  standalone: true, // Отметим, что компонент standalone
   templateUrl: './automats.component.html',
   styleUrls: ['./automats.component.css']
 })
