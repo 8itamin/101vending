@@ -1,0 +1,11 @@
+<div>
+    <h1>Automats Information</h1>
+    <ul>
+      <li *ngFor="let automat of automats">
+        <p>{{ automat.machineId }}</p>
+        <p>Temperature: {{ automat.temperature }}°C</p>
+        <p>Stock Level: {{ automat.stockLevel }}%</p>
+        <!-- Добавьте другие поля по вашему усмотрению -->
+      </li>
+    </ul>
+  </div>

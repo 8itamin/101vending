@@ -1,0 +1,42 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"]
+    },
+
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+
+    "moduleResolution": "node",   // Используем Node.js для разрешения модулей
+    "target": "es2020",            // Указываем совместимую версию ECMAScript
+    "module": "es2020",            // ES модули
+    "strict": true,                // Включаем строгую типизацию
+    "esModuleInterop": true,       // Включаем совместимость с ESM
+    "skipLibCheck": true           // Пропускаем проверку библиотек
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
