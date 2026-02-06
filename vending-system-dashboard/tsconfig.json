@@ -3,26 +3,16 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@angular/*": ["node_modules/@angular/*"]
-    },
-
+    "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-
+    "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-
-    "moduleResolution": "node",   // Используем Node.js для разрешения модулей
-    "target": "es2020",            // Указываем совместимую версию ECMAScript
-    "module": "es2020",            // ES модули
-    "strict": true,                // Включаем строгую типизацию
-    "esModuleInterop": true,       // Включаем совместимость с ESM
-    "skipLibCheck": true           // Пропускаем проверку библиотек
+    "moduleResolution": "bundler"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

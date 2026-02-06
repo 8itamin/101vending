@@ -1,40 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { io } from 'socket.io-client';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { io, Socket } from 'socket.io-client';
 
 @Component({
   selector: 'app-automats',
-  standalone: true, // Отметим, что компонент standalone
-  templateUrl: './automats.component.html',
-  styleUrls: ['./automats.component.css']
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './automats.html',
+  styleUrl: './automats.scss'
 })
-
 export class AutomatsComponent implements OnInit {
-  private socket: any;
+  private socket?: Socket;
   automats: any[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   ngOnInit(): void {
-    // Устанавливаем соединение с сервером через WebSocket
-    this.socket = io('http://localhost:3000');  // URL вашего сервера
+    this.socket = io('http://localhost:3000');
     this.socket.on('automat_update', (data: any) => {
-      console.log('Received real-time update:', data);
       this.updateAutomatData(data);
     });
 
-    this.fetchAutomatsData();  // Получаем данные с сервера
+    this.fetchAutomatsData();
   }
 
-  fetchAutomatsData() {
-    this.http.get('http://localhost:3000/api/automats')
-      .subscribe((data: any) => {
-        this.automats = data;
-      });
+  fetchAutomatsData(): void {
+    this.http.get<any[]>('http://localhost:3000/api/automats').subscribe((data) => {
+      this.automats = data;
+    });
   }
 
-  updateAutomatData(data: any) {
-    // Обновляем данные об автоматах в UI
+  updateAutomatData(data: any): void {
     const index = this.automats.findIndex((automat: any) => automat.machineId === data.machineId);
     if (index !== -1) {
       this.automats[index] = { ...this.automats[index], ...data };
