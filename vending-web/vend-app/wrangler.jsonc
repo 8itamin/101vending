@@ -1,7 +1,8 @@
 {
-  "name": "vend-app",
+  "name": "101vending",
   "compatibility_date": "2026-02-18",
   "assets": {
-    "directory": "./dist/vend-app"
+    "directory": "./dist/vend-app/browser",
+    "not_found_handling": "single-page-application"
   }
 }
