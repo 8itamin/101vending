@@ -1,5 +1,5 @@
 {
-  "name": "vend-app",
+  "name": "101vending",
   "compatibility_date": "2026-02-18",
   "assets": {
     "directory": "./dist/vend-app"
