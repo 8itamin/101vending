@@ -1,0 +1,260 @@
+﻿<div class="dashboard-shell" [class.theme-dark]="darkTheme()" [class.sidebar-collapsed]="sidebarCollapsed()" [class.mobile-sidebar-open]="mobileSidebarOpen()">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <span class="brand-mark">VM</span>
+        <span class="brand-text" [class.hide]="sidebarCollapsed()">VendingOS</span>
+      </div>
+      <button type="button" class="icon-btn" (click)="toggleSidebar()" aria-label="Collapse sidebar">
+        {{ sidebarCollapsed() ? '>' : '<' }}
+      </button>
+    </div>
+
+    <div class="menu-groups">
+      @for (group of menuGroups; track group.title) {
+        <section class="menu-group">
+          <h3 class="menu-title" [class.hide]="sidebarCollapsed()">{{ group.title }}</h3>
+          @for (item of group.items; track trackByLabel($index, item)) {
+            <button
+              type="button"
+              class="menu-item"
+              [class.active]="activeMenu() === item.section"
+              (click)="activateSection(item.section)"
+            >
+              <span class="menu-icon">{{ item.icon }}</span>
+              <span class="menu-label" [class.hide]="sidebarCollapsed()">{{ item.label }}</span>
+            </button>
+          }
+        </section>
+      }
+    </div>
+  </aside>
+
+  <div class="backdrop" (click)="toggleMobileSidebar()"></div>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button type="button" class="icon-btn mobile-only" (click)="toggleMobileSidebar()" aria-label="Open menu">=</button>
+        <div class="breadcrumbs">
+          @for (crumb of breadcrumb; track crumb) {
+            <span class="crumb">{{ crumb }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <label class="search-field" aria-label="Global search">
+          <span class="search-mark">S</span>
+          <input
+            type="search"
+            placeholder="Search machines, products, transactions"
+            [value]="searchQuery()"
+            (input)="setSearch($any($event.target).value)"
+          />
+        </label>
+
+        <button type="button" class="icon-btn" (click)="toggleTheme()" aria-label="Toggle theme">{{ darkTheme() ? 'L' : 'D' }}</button>
+
+        <button type="button" class="icon-btn notify" aria-label="Notifications">
+          N
+          <span class="badge">{{ notificationsCount() }}</span>
+        </button>
+
+        <div class="profile-wrap">
+          <button type="button" class="icon-btn" (click)="toggleProfileMenu()" aria-label="Open profile menu">P</button>
+          @if (profileMenuOpen()) {
+            <div class="profile-menu">
+              <button type="button" (click)="activateSection('Company')">Company</button>
+              <button type="button" (click)="logout()">Logout</button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <section class="alert-strip">
+      <article class="alert warning">12 machines offline</article>
+      <article class="alert info">4 require refill</article>
+      <article class="alert success">Revenue today: {{ revenueToday | currency: 'INR':'symbol':'1.0-0' }}</article>
+    </section>
+
+    @if (isLoading()) {
+      <section class="kpi-grid skeleton">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="skeleton-card"></div>
+        }
+      </section>
+      <section class="main-grid skeleton">
+        <div class="skeleton-block"></div>
+        <div class="skeleton-block"></div>
+      </section>
+    } @else {
+      <section class="kpi-grid">
+        @for (kpi of kpis; track trackByKpi($index, kpi)) {
+          <a class="kpi-card" [routerLink]="kpi.link" [style.--kpi-color]="kpi.color">
+            <div>
+              <h3>{{ kpi.title }}</h3>
+              <p>{{ kpi.value }}</p>
+            </div>
+            <svg viewBox="0 0 110 40" preserveAspectRatio="none">
+              <path [attr.d]="kpi.sparkline"></path>
+            </svg>
+          </a>
+        }
+      </section>
+
+      <section class="main-grid">
+        <article class="panel product-sales">
+          <div class="panel-head">
+            <h2>Product Sales</h2>
+            <div class="panel-tools">
+              <div class="legend">
+                <span class="dot prev"></span> Previous month
+                <span class="dot curr"></span> Selected month
+              </div>
+              <select [value]="selectedMonth()" (change)="setMonth($any($event.target).value)">
+                <option>April 2021</option>
+                <option>May 2021</option>
+                <option>June 2021</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="area-chart" aria-label="Product sales chart">
+            <svg viewBox="0 0 900 280" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="prevFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2f9ad8" stop-opacity="0.45"></stop>
+                  <stop offset="100%" stop-color="#2f9ad8" stop-opacity="0.05"></stop>
+                </linearGradient>
+                <linearGradient id="currFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f08c3b" stop-opacity="0.45"></stop>
+                  <stop offset="100%" stop-color="#f08c3b" stop-opacity="0.05"></stop>
+                </linearGradient>
+              </defs>
+              <path class="area prev" d="M0,70 C70,40 120,230 190,180 C260,130 330,220 400,120 C470,20 540,160 610,180 C680,200 740,90 810,130 C850,150 880,140 900,120 L900,280 L0,280 Z"></path>
+              <path class="area curr" d="M0,220 C70,250 120,120 190,140 C260,160 330,90 400,110 C470,130 540,70 610,150 C680,230 740,110 810,80 C850,65 880,50 900,48 L900,280 L0,280 Z"></path>
+            </svg>
+            <button type="button" class="ghost-link">Open full analytics</button>
+          </div>
+        </article>
+
+        <aside class="side-stack">
+          <article class="panel payment-widget">
+            <h2>Payment Mix</h2>
+            <div class="payment-layout">
+              <div class="donut" [style.background]="donutBackground()">
+                <span>{{ totalPayments() }}</span>
+              </div>
+              <ul>
+                @for (item of payments; track item.method) {
+                  <li>
+                    <span>{{ item.method }}</span>
+                    <strong>{{ paymentPercent(item.value) | number:'1.0-0' }}%</strong>
+                  </li>
+                }
+              </ul>
+            </div>
+          </article>
+
+          <article class="panel earnings-widget">
+            <h2>Earnings</h2>
+            <div class="earnings-list">
+              <p><span>Total Expense</span><strong>{{ monthlyExpenses | currency: 'INR':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Revenue</span><strong>{{ monthlyRevenue | currency: 'INR':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Net Profit</span><strong>{{ monthlyProfit | currency: 'INR':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Margin</span><strong>{{ marginPercent }}% vs last month</strong></p>
+            </div>
+            <div class="gauge">
+              <div class="gauge-fill" [style.width.%]="marginPercent"></div>
+            </div>
+          </article>
+
+          <article class="panel status-widget">
+            <h2>Machine Operation Status</h2>
+            <div class="status-list">
+              @for (status of operationStatus; track status.name) {
+                <div class="status-row">
+                  <span>{{ status.name }}</span>
+                  <div class="status-bar">
+                    <div class="status-fill" [style.width.%]="status.value" [style.background]="status.color"></div>
+                  </div>
+                  <strong>{{ status.value }}%</strong>
+                </div>
+              }
+            </div>
+          </article>
+        </aside>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel products-table">
+          <div class="panel-head">
+            <h2>Top Selling Products</h2>
+            <small>Search ties into global search</small>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th><button type="button" (click)="sortProducts('quantity')">Quantity</button></th>
+                  <th><button type="button" (click)="sortProducts('amount')">Amount</button></th>
+                  <th><button type="button" (click)="sortProducts('profit')">Profit</button></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of filteredProducts(); track trackByProduct($index, row)) {
+                  <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.price | currency: 'INR':'symbol':'1.0-0' }}</td>
+                    <td>{{ row.quantity }}</td>
+                    <td>{{ row.amount | currency: 'INR':'symbol':'1.2-2' }}</td>
+                    <td>{{ row.profit | currency: 'INR':'symbol':'1.2-2' }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5">No products match search query.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel yearly-sales">
+          <div class="panel-head">
+            <h2>Sales</h2>
+            <select [value]="selectedSalesPeriod()" (change)="setSalesPeriod($any($event.target).value)">
+              <option>Last Year</option>
+              <option>Quarter</option>
+              <option>Month</option>
+            </select>
+          </div>
+
+          <div class="bars" aria-label="Yearly sales chart">
+            @for (bar of yearSales; track bar.label) {
+              <div class="bar-col">
+                <div class="bar-shell">
+                  <div class="bar-fill" [style.height.%]="yearBarHeight(bar.value)"></div>
+                </div>
+                <span>{{ bar.label }}</span>
+              </div>
+            }
+          </div>
+        </article>
+      </section>
+    }
+  </main>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile sections">
+    <button type="button" class="active">Dash</button>
+    <button type="button">Finance</button>
+    <button type="button">Machines</button>
+    <button type="button">Alerts</button>
+    <button type="button">Admin</button>
+  </nav>
+</div>
