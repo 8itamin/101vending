@@ -23,7 +23,7 @@ export interface PasswordResetResponse {
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
-  private readonly API_URL = 'http://83.222.8.82:3000/api/auth';
+  private readonly API_URL = 'https://api.retailos.ru/api/auth';
 
   constructor(private readonly http: HttpClient) {}
 
