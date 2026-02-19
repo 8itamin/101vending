@@ -218,6 +218,7 @@ a {
 
 .dashboard-shell .table-wrap {
   overflow: auto;
+  max-width: 100%;
 }
 
 .dashboard-shell table {
@@ -273,6 +274,15 @@ a {
   width: 100%;
   border-radius: inherit;
   background: linear-gradient(180deg, #2f9ad8 0%, #f03b62 100%);
+}
+
+.dashboard-shell .bottom-grid {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.dashboard-shell .bottom-grid > * {
+  min-width: 0;
 }
 
 @media (max-width: 900px) {

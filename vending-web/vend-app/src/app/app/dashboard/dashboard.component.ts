@@ -1,4 +1,4 @@
-﻿import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { Component, OnDestroy, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -52,7 +52,7 @@ type DashboardToast = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, DecimalPipe, CurrencyPipe],
+  imports: [CommonModule, RouterLink, DecimalPipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -159,8 +159,6 @@ export class DashboardComponent implements OnDestroy {
       link: '/app/dashboard?view=inactive-machines',
       sparkline: 'M0,30 C10,26 20,18 30,22 C40,31 50,18 60,12 C70,6 80,24 90,15 C100,7 106,4 110,6'
     }
-
-
   ];
 
   readonly payments: PaymentItem[] = [
