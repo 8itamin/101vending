@@ -144,3 +144,139 @@ a {
   white-space: nowrap;
   border-width: 0;
 }
+
+.dashboard-shell .toast-stack {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 45;
+  width: min(360px, calc(100vw - 24px));
+  display: grid;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.dashboard-shell .toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-md);
+  font-weight: 600;
+  animation: toast-in 0.2s ease;
+}
+
+.dashboard-shell .toast.warning {
+  background: #fff0db;
+  border-color: #f6c06e;
+  color: #6b4100;
+}
+
+.dashboard-shell .toast.info {
+  background: #def4ff;
+  border-color: #8dd2f3;
+  color: #005f84;
+}
+
+.dashboard-shell .toast.success {
+  background: #def8e9;
+  border-color: #89d7ad;
+  color: #095c34;
+}
+
+.dashboard-shell .toast-close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-shell .toast-stack {
+    bottom: 74px;
+    right: 10px;
+    width: calc(100vw - 20px);
+  }
+}
+
+.dashboard-shell .table-wrap {
+  overflow: auto;
+}
+
+.dashboard-shell table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-shell th,
+.dashboard-shell td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dashboard-shell th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.dashboard-shell th button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dashboard-shell .bars {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8px;
+  align-items: end;
+  min-height: 210px;
+}
+
+.dashboard-shell .bar-col {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+}
+
+.dashboard-shell .bar-shell {
+  width: 18px;
+  height: 170px;
+  border-radius: 999px;
+  background: var(--surface);
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+}
+
+.dashboard-shell .bar-fill {
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #2f9ad8 0%, #f03b62 100%);
+}
+
+@media (max-width: 900px) {
+  .dashboard-shell .bars {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
