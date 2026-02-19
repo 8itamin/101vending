@@ -73,12 +73,6 @@
       </div>
     </header>
 
-    <section class="alert-strip">
-      <article class="alert warning">⚠️ 12 автоматов офлайн</article>
-      <article class="alert info">🧃 4 требуют пополнения</article>
-      <article class="alert success">📈 Выручка сегодня: {{ revenueToday | currency: 'INR':'symbol':'1.0-0' }}</article>
-    </section>
-
     @if (isLoading()) {
       <section class="kpi-grid skeleton">
         @for (i of [1,2,3,4,5,6]; track i) {
@@ -161,9 +155,9 @@
           <article class="panel earnings-widget">
             <h2>Финансовые показатели</h2>
             <div class="earnings-list">
-              <p><span>Общие расходы</span><strong>{{ monthlyExpenses | currency: 'RUB':'symbol':'1.2-2' }}</strong></p>
-              <p><span>Выручка</span><strong>{{ monthlyRevenue | currency: 'RUB':'symbol':'1.2-2' }}</strong></p>
-              <p><span>Чистая прибыль</span><strong>{{ monthlyProfit | currency: 'RUB':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Общие расходы</span><strong>{{ monthlyExpenses | number:'1.2-2' }} ₽</strong></p>
+              <p><span>Выручка</span><strong>{{ monthlyRevenue | number:'1.2-2' }} ₽</strong></p>
+              <p><span>Чистая прибыль</span><strong>{{ monthlyProfit | number:'1.2-2' }} ₽</strong></p>
               <p><span>Маржа</span><strong>{{ marginPercent }}% к прошлому месяцу</strong></p>
             </div>
             <div class="gauge">
@@ -210,10 +204,10 @@
                 @for (row of filteredProducts(); track trackByProduct($index, row)) {
                   <tr>
                     <td>{{ row.name }}</td>
-                    <td>{{ row.price | currency:'RUB':'symbol':'1.0-0' }}</td>
+                    <td>{{ row.price | number:'1.0-0' }} ₽</td>
                     <td>{{ row.quantity }}</td>
-                    <td>{{ row.amount | currency:'RUB':'symbol':'1.0-0' }}</td>
-                    <td>{{ row.profit | currency:'RUB':'symbol':'1.0-0' }}</td>
+                    <td>{{ row.amount | number:'1.0-0' }} ₽</td>
+                    <td>{{ row.profit | number:'1.0-0' }} ₽</td>
                   </tr>
                 } @empty {
                   <tr>
@@ -249,6 +243,15 @@
       </section>
     }
   </main>
+
+  <section class="toast-stack" aria-live="polite" aria-atomic="false">
+    @for (toast of toasts(); track toast.id) {
+      <article class="toast" [class.warning]="toast.kind === 'warning'" [class.info]="toast.kind === 'info'" [class.success]="toast.kind === 'success'">
+        <span>{{ toast.message }}</span>
+        <button type="button" class="toast-close" (click)="dismissToast(toast.id)" aria-label="Закрыть уведомление">×</button>
+      </article>
+    }
+  </section>
 
   <nav class="mobile-bottom-nav" aria-label="Разделы на мобильном">
     <button type="button" class="active">🏠 Главная</button>

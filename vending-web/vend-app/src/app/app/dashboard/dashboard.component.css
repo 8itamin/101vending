@@ -88,11 +88,44 @@
   border-radius: 8px; cursor: pointer;
 }
 
-.alert-strip { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 14px; }
-.alert { border-radius: 12px; padding: 10px 12px; font-weight: 600; border: 1px solid transparent; }
-.alert.warning { background: #fff0db; border-color: #f6c06e; color: #6b4100; }
-.alert.info { background: #def4ff; border-color: #8dd2f3; color: #005f84; }
-.alert.success { background: #def8e9; border-color: #89d7ad; color: #095c34; }
+.toast-stack {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 45;
+  width: min(360px, calc(100vw - 24px));
+  display: grid;
+  gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow);
+  font-weight: 600;
+  animation: toast-in .2s ease;
+}
+.toast.warning { background: #fff0db; border-color: #f6c06e; color: #6b4100; }
+.toast.info { background: #def4ff; border-color: #8dd2f3; color: #005f84; }
+.toast.success { background: #def8e9; border-color: #89d7ad; color: #095c34; }
+.toast-close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px; margin-bottom: 14px; }
 .kpi-card {
@@ -181,7 +214,7 @@ th button { border: 0; background: transparent; color: inherit; cursor: pointer;
   }
   .breadcrumbs { display: none; }
   .search-field { width: min(180px, 48vw); }
-  .alert-strip { grid-template-columns: 1fr; }
+  .toast-stack { bottom: 74px; right: 10px; width: calc(100vw - 20px); }
   .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .payment-layout { grid-template-columns: 1fr; }
   .bars { grid-template-columns: repeat(6, minmax(0,1fr)); }

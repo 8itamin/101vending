@@ -1,5 +1,5 @@
 ﻿import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnDestroy, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -41,6 +41,14 @@ type YearBar = {
   value: number;
 };
 
+type DashboardToastKind = 'warning' | 'info' | 'success';
+
+type DashboardToast = {
+  id: number;
+  kind: DashboardToastKind;
+  message: string;
+};
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -48,7 +56,7 @@ type YearBar = {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnDestroy {
   readonly isLoading = signal(true);
   readonly sidebarCollapsed = signal(false);
   readonly mobileSidebarOpen = signal(false);
@@ -61,10 +69,16 @@ export class DashboardComponent {
   readonly searchQuery = signal('');
   readonly productSortBy = signal<'amount' | 'profit' | 'quantity'>('amount');
   readonly productSortDir = signal<'asc' | 'desc'>('desc');
+  readonly toasts = signal<DashboardToast[]>([]);
 
   readonly revenueToday = 5126;
   readonly revenueYesterday = 4988;
   readonly revenueAverage = 4720;
+  readonly offlineMachinesCount = 12;
+  readonly refillRequiredCount = 4;
+
+  private toastId = 0;
+  private readonly toastTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
   readonly breadcrumb = ['Панели', 'Основная'];
 
@@ -105,7 +119,7 @@ export class DashboardComponent {
   readonly kpis: KpiItem[] = [
     {
       title: 'Продажи',
-      value: '10,405,000₽',
+      value: '10,405,000',
       color: '#f03b62',
       link: '/app/dashboard?view=sales',
       sparkline: 'M0,28 C10,20 20,14 30,20 C40,25 50,8 60,12 C70,22 80,11 90,8 C100,6 106,2 110,3'
@@ -220,7 +234,10 @@ export class DashboardComponent {
     private authService: AuthService,
     private router: Router
   ) {
-    setTimeout(() => this.isLoading.set(false), 800);
+    setTimeout(() => {
+      this.isLoading.set(false);
+      this.showInitialToasts();
+    }, 800);
   }
 
   toggleTheme(): void {
@@ -306,6 +323,35 @@ export class DashboardComponent {
 
   trackByProduct(_: number, item: ProductRow): string {
     return item.name;
+  }
+
+  dismissToast(id: number): void {
+    const timer = this.toastTimers.get(id);
+    if (timer) {
+      clearTimeout(timer);
+      this.toastTimers.delete(id);
+    }
+
+    this.toasts.update((items) => items.filter((item) => item.id !== id));
+  }
+
+  private showInitialToasts(): void {
+    this.pushToast('warning', `⚠️ ${this.offlineMachinesCount} автоматов офлайн`);
+    this.pushToast('info', `🧃 ${this.refillRequiredCount} требуют пополнения`, 5200);
+    this.pushToast('success', `📈 Выручка сегодня: ${this.revenueToday.toLocaleString('ru-RU')} ₽`, 6200);
+  }
+
+  private pushToast(kind: DashboardToastKind, message: string, timeoutMs = 4500): void {
+    const id = ++this.toastId;
+    this.toasts.update((items) => [...items, { id, kind, message }]);
+
+    const timer = setTimeout(() => this.dismissToast(id), timeoutMs);
+    this.toastTimers.set(id, timer);
+  }
+
+  ngOnDestroy(): void {
+    this.toastTimers.forEach((timer) => clearTimeout(timer));
+    this.toastTimers.clear();
   }
 
   logout(): void {
