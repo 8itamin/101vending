@@ -68,17 +68,17 @@ export class RegisterComponent {
     this.authService.register({ name, email, password }).subscribe({
       next: (response) => {
         if (response.success) {
-          this.successMessage.set(response.message || 'Account created successfully!');
+          this.successMessage.set(response.message || 'Аккаунт успешно создан!');
           setTimeout(() => {
             this.router.navigate(['/auth/login']);
           }, 1500);
         } else {
-          this.errorMessage.set(response.message || 'Registration failed');
+          this.errorMessage.set(response.message || 'Не удалось завершить регистрацию');
         }
         this.isLoading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set('An error occurred. Please try again.');
+        this.errorMessage.set('Произошла ошибка. Попробуйте снова.');
         this.isLoading.set(false);
       }
     });

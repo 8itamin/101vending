@@ -2,12 +2,12 @@
   <aside class="sidebar">
     <div class="sidebar-top">
       <div class="brand">
-        <span class="brand-mark">VM</span>
-        <span class="brand-text" [class.hide]="sidebarCollapsed()">VendingOS</span>
+        <span class="brand-mark">ROS</span>
+        <span class="brand-text" [class.hide]="sidebarCollapsed()">RetailOS</span>
       </div>
-      <button type="button" class="icon-btn" (click)="toggleSidebar()" aria-label="Collapse sidebar">
+      <!-- <button type="button" class="icon-btn" (click)="toggleSidebar()" aria-label="Collapse sidebar">
         {{ sidebarCollapsed() ? '>' : '<' }}
-      </button>
+      </button> -->
     </div>
 
     <div class="menu-groups">
@@ -35,7 +35,7 @@
   <main class="workspace">
     <header class="topbar">
       <div class="topbar-left">
-        <button type="button" class="icon-btn mobile-only" (click)="toggleMobileSidebar()" aria-label="Open menu">=</button>
+        <button type="button" class="icon-btn mobile-only" (click)="toggleMobileSidebar()" aria-label="Открыть меню">☰</button>
         <div class="breadcrumbs">
           @for (crumb of breadcrumb; track crumb) {
             <span class="crumb">{{ crumb }}</span>
@@ -44,29 +44,29 @@
       </div>
 
       <div class="topbar-right">
-        <label class="search-field" aria-label="Global search">
-          <span class="search-mark">S</span>
+        <label class="search-field" aria-label="Глобальный поиск">
+          <span class="search-mark">🔍</span>
           <input
             type="search"
-            placeholder="Search machines, products, transactions"
+            placeholder="Поиск автоматов, товаров, транзакций"
             [value]="searchQuery()"
             (input)="setSearch($any($event.target).value)"
           />
         </label>
 
-        <button type="button" class="icon-btn" (click)="toggleTheme()" aria-label="Toggle theme">{{ darkTheme() ? 'L' : 'D' }}</button>
+        <button type="button" class="icon-btn" (click)="toggleTheme()" aria-label="Переключить тему">{{ darkTheme() ? '☀️' : '🌙' }}</button>
 
-        <button type="button" class="icon-btn notify" aria-label="Notifications">
-          N
+        <button type="button" class="icon-btn notify" aria-label="Уведомления">
+          🔔
           <span class="badge">{{ notificationsCount() }}</span>
         </button>
 
         <div class="profile-wrap">
-          <button type="button" class="icon-btn" (click)="toggleProfileMenu()" aria-label="Open profile menu">P</button>
+          <button type="button" class="icon-btn" (click)="toggleProfileMenu()" aria-label="Открыть меню профиля">👤</button>
           @if (profileMenuOpen()) {
             <div class="profile-menu">
-              <button type="button" (click)="activateSection('Company')">Company</button>
-              <button type="button" (click)="logout()">Logout</button>
+              <button type="button" (click)="activateSection('Компания')">Компания</button>
+              <button type="button" (click)="logout()">Выйти</button>
             </div>
           }
         </div>
@@ -74,9 +74,9 @@
     </header>
 
     <section class="alert-strip">
-      <article class="alert warning">12 machines offline</article>
-      <article class="alert info">4 require refill</article>
-      <article class="alert success">Revenue today: {{ revenueToday | currency: 'INR':'symbol':'1.0-0' }}</article>
+      <article class="alert warning">⚠️ 12 автоматов офлайн</article>
+      <article class="alert info">🧃 4 требуют пополнения</article>
+      <article class="alert success">📈 Выручка сегодня: {{ revenueToday | currency: 'INR':'symbol':'1.0-0' }}</article>
     </section>
 
     @if (isLoading()) {
@@ -107,21 +107,21 @@
       <section class="main-grid">
         <article class="panel product-sales">
           <div class="panel-head">
-            <h2>Product Sales</h2>
+            <h2>Продажи товаров</h2>
             <div class="panel-tools">
               <div class="legend">
-                <span class="dot prev"></span> Previous month
-                <span class="dot curr"></span> Selected month
+                <span class="dot prev"></span> Предыдущий месяц
+                <span class="dot curr"></span> Выбранный месяц
               </div>
               <select [value]="selectedMonth()" (change)="setMonth($any($event.target).value)">
-                <option>April 2021</option>
-                <option>May 2021</option>
-                <option>June 2021</option>
+                <option>Апрель 2025</option>
+                <option>Май 2025</option>
+                <option>Июнь 2025</option>
               </select>
             </div>
           </div>
 
-          <div class="area-chart" aria-label="Product sales chart">
+          <div class="area-chart" aria-label="График продаж товаров">
             <svg viewBox="0 0 900 280" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="prevFill" x1="0" y1="0" x2="0" y2="1">
@@ -136,13 +136,13 @@
               <path class="area prev" d="M0,70 C70,40 120,230 190,180 C260,130 330,220 400,120 C470,20 540,160 610,180 C680,200 740,90 810,130 C850,150 880,140 900,120 L900,280 L0,280 Z"></path>
               <path class="area curr" d="M0,220 C70,250 120,120 190,140 C260,160 330,90 400,110 C470,130 540,70 610,150 C680,230 740,110 810,80 C850,65 880,50 900,48 L900,280 L0,280 Z"></path>
             </svg>
-            <button type="button" class="ghost-link">Open full analytics</button>
+            <button type="button" class="ghost-link">Открыть полную аналитику</button>
           </div>
         </article>
 
         <aside class="side-stack">
           <article class="panel payment-widget">
-            <h2>Payment Mix</h2>
+            <h2>Структура оплат</h2>
             <div class="payment-layout">
               <div class="donut" [style.background]="donutBackground()">
                 <span>{{ totalPayments() }}</span>
@@ -159,12 +159,12 @@
           </article>
 
           <article class="panel earnings-widget">
-            <h2>Earnings</h2>
+            <h2>Финансовые показатели</h2>
             <div class="earnings-list">
-              <p><span>Total Expense</span><strong>{{ monthlyExpenses | currency: 'INR':'symbol':'1.2-2' }}</strong></p>
-              <p><span>Revenue</span><strong>{{ monthlyRevenue | currency: 'INR':'symbol':'1.2-2' }}</strong></p>
-              <p><span>Net Profit</span><strong>{{ monthlyProfit | currency: 'INR':'symbol':'1.2-2' }}</strong></p>
-              <p><span>Margin</span><strong>{{ marginPercent }}% vs last month</strong></p>
+              <p><span>Общие расходы</span><strong>{{ monthlyExpenses | currency: 'RUB':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Выручка</span><strong>{{ monthlyRevenue | currency: 'RUB':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Чистая прибыль</span><strong>{{ monthlyProfit | currency: 'RUB':'symbol':'1.2-2' }}</strong></p>
+              <p><span>Маржа</span><strong>{{ marginPercent }}% к прошлому месяцу</strong></p>
             </div>
             <div class="gauge">
               <div class="gauge-fill" [style.width.%]="marginPercent"></div>
@@ -172,7 +172,7 @@
           </article>
 
           <article class="panel status-widget">
-            <h2>Machine Operation Status</h2>
+            <h2>Статус работы автоматов</h2>
             <div class="status-list">
               @for (status of operationStatus; track status.name) {
                 <div class="status-row">
@@ -191,33 +191,33 @@
       <section class="bottom-grid">
         <article class="panel products-table">
           <div class="panel-head">
-            <h2>Top Selling Products</h2>
-            <small>Search ties into global search</small>
+            <h2>Лидеры продаж</h2>
+            <small>Поиск синхронизирован с глобальным поиском</small>
           </div>
 
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th><button type="button" (click)="sortProducts('quantity')">Quantity</button></th>
-                  <th><button type="button" (click)="sortProducts('amount')">Amount</button></th>
-                  <th><button type="button" (click)="sortProducts('profit')">Profit</button></th>
+                  <th>Название</th>
+                  <th>Цена</th>
+                  <th><button type="button" (click)="sortProducts('quantity')">Количество</button></th>
+                  <th><button type="button" (click)="sortProducts('amount')">Сумма</button></th>
+                  <th><button type="button" (click)="sortProducts('profit')">Прибыль</button></th>
                 </tr>
               </thead>
               <tbody>
                 @for (row of filteredProducts(); track trackByProduct($index, row)) {
                   <tr>
                     <td>{{ row.name }}</td>
-                    <td>{{ row.price | currency: 'INR':'symbol':'1.0-0' }}</td>
+                    <td>{{ row.price | currency:'RUB':'symbol':'1.0-0' }}</td>
                     <td>{{ row.quantity }}</td>
-                    <td>{{ row.amount | currency: 'INR':'symbol':'1.2-2' }}</td>
-                    <td>{{ row.profit | currency: 'INR':'symbol':'1.2-2' }}</td>
+                    <td>{{ row.amount | currency:'RUB':'symbol':'1.0-0' }}</td>
+                    <td>{{ row.profit | currency:'RUB':'symbol':'1.0-0' }}</td>
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="5">No products match search query.</td>
+                    <td colspan="5">По вашему запросу товары не найдены.</td>
                   </tr>
                 }
               </tbody>
@@ -227,15 +227,15 @@
 
         <article class="panel yearly-sales">
           <div class="panel-head">
-            <h2>Sales</h2>
+            <h2>Продажи</h2>
             <select [value]="selectedSalesPeriod()" (change)="setSalesPeriod($any($event.target).value)">
-              <option>Last Year</option>
-              <option>Quarter</option>
-              <option>Month</option>
+              <option>За год</option>
+              <option>За квартал</option>
+              <option>За месяц</option>
             </select>
           </div>
 
-          <div class="bars" aria-label="Yearly sales chart">
+          <div class="bars" aria-label="График годовых продаж">
             @for (bar of yearSales; track bar.label) {
               <div class="bar-col">
                 <div class="bar-shell">
@@ -250,11 +250,11 @@
     }
   </main>
 
-  <nav class="mobile-bottom-nav" aria-label="Mobile sections">
-    <button type="button" class="active">Dash</button>
-    <button type="button">Finance</button>
-    <button type="button">Machines</button>
-    <button type="button">Alerts</button>
-    <button type="button">Admin</button>
+  <nav class="mobile-bottom-nav" aria-label="Разделы на мобильном">
+    <button type="button" class="active">🏠 Главная</button>
+    <button type="button">💹 Финансы</button>
+    <button type="button">🤖 Автоматы</button>
+    <button type="button">🔔 Оповещения</button>
+    <button type="button">🛠️ Админ</button>
   </nav>
 </div>

@@ -55,9 +55,9 @@ export class DashboardComponent {
   readonly profileMenuOpen = signal(false);
   readonly darkTheme = signal(false);
   readonly notificationsCount = signal(7);
-  readonly activeMenu = signal('Dashboard');
-  readonly selectedMonth = signal('April 2021');
-  readonly selectedSalesPeriod = signal('Last Year');
+  readonly activeMenu = signal('Панель');
+  readonly selectedMonth = signal('Апрель 2025');
+  readonly selectedSalesPeriod = signal('За год');
   readonly searchQuery = signal('');
   readonly productSortBy = signal<'amount' | 'profit' | 'quantity'>('amount');
   readonly productSortDir = signal<'asc' | 'desc'>('desc');
@@ -66,112 +66,113 @@ export class DashboardComponent {
   readonly revenueYesterday = 4988;
   readonly revenueAverage = 4720;
 
-  readonly breadcrumb = ['Dashboards', 'Default'];
+  readonly breadcrumb = ['Панели', 'Основная'];
 
   readonly menuGroups: { title: string; items: MenuItem[] }[] = [
     {
-      title: 'Machines',
+      title: 'Автоматы',
       items: [
-        { label: 'Machines List', icon: 'M', section: 'Machines List' },
-        { label: 'Active Machines', icon: 'A', section: 'Active Machines' },
-        { label: 'Inactive Machines', icon: 'I', section: 'Inactive Machines' },
-        { label: 'Machine Types', icon: 'T', section: 'Machine Types' },
-        { label: 'Purchase Order', icon: 'P', section: 'Purchase Order' },
-        { label: 'Offers & Coupons', icon: 'O', section: 'Offers & Coupons' }
+        { label: 'Список автоматов', icon: '🗂️', section: 'Список автоматов' },
+        { label: 'Активные автоматы', icon: '✅', section: 'Активные автоматы' },
+        { label: 'Неактивные автоматы', icon: '⛔', section: 'Неактивные автоматы' },
+        { label: 'Заказы', icon: '🛒', section: 'Заказы' },
+        { label: 'Акции и купоны', icon: '🎟️', section: 'Акции и купоны' }
       ]
     },
     {
-      title: 'Finance',
+      title: 'Финансы',
       items: [
-        { label: 'Revenue', icon: 'R', section: 'Revenue' },
-        { label: 'Transactions', icon: 'X', section: 'Transactions' }
+        { label: 'Выручка', icon: '💰', section: 'Выручка' },
+        { label: 'Транзакции', icon: '💳', section: 'Транзакции' }
       ]
     },
     {
-      title: 'Administration',
+      title: 'Администрирование',
       items: [
-        { label: 'User Management', icon: 'U', section: 'User Management' },
-        { label: 'Company', icon: 'C', section: 'Company' }
+        { label: 'Пользователи', icon: '👥', section: 'Пользователи' },
+        { label: 'Компания', icon: '🏢', section: 'Компания' }
       ]
     },
     {
-      title: 'Support',
+      title: 'Поддержка',
       items: [
-        { label: 'Tickets', icon: 'Q', section: 'Tickets' },
-        { label: 'Help & Support', icon: 'H', section: 'Help & Support' }
+        { label: 'Тикеты', icon: '🎫', section: 'Тикеты' },
+        { label: 'Помощь и поддержка', icon: '🛟', section: 'Помощь и поддержка' }
       ]
     }
   ];
 
   readonly kpis: KpiItem[] = [
     {
-      title: 'Machines',
-      value: '2,046',
-      color: '#2f9ad8',
-      link: '/app/dashboard?view=machines',
-      sparkline: 'M0,30 C10,15 20,35 30,22 C40,10 50,18 60,9 C70,5 80,25 90,11 C95,7 100,4 110,8'
+      title: 'Продажи',
+      value: '10,405,000₽',
+      color: '#f03b62',
+      link: '/app/dashboard?view=sales',
+      sparkline: 'M0,28 C10,20 20,14 30,20 C40,25 50,8 60,12 C70,22 80,11 90,8 C100,6 106,2 110,3'
     },
     {
-      title: 'Clients',
-      value: '13,472',
-      color: '#6a62d2',
-      link: '/app/dashboard?view=clients',
-      sparkline: 'M0,34 C10,30 20,12 30,22 C40,32 50,13 60,16 C70,22 80,8 90,12 C100,8 106,2 110,6'
-    },
-    {
-      title: 'Active Machines',
-      value: '2,012',
-      color: '#e02cb3',
-      link: '/app/dashboard?view=active-machines',
-      sparkline: 'M0,28 C10,32 20,24 30,14 C40,8 50,25 60,19 C70,8 80,10 90,6 C100,5 106,2 110,4'
-    },
-    {
-      title: 'Inactive Machines',
-      value: '34',
-      color: '#ff7848',
-      link: '/app/dashboard?view=inactive-machines',
-      sparkline: 'M0,30 C10,26 20,18 30,22 C40,31 50,18 60,12 C70,6 80,24 90,15 C100,7 106,4 110,6'
-    },
-    {
-      title: 'Transactions',
+      title: 'Транзакции',
       value: '17,465',
       color: '#c96a00',
       link: '/app/dashboard?view=transactions',
       sparkline: 'M0,35 C10,34 20,20 30,27 C40,36 50,21 60,17 C70,21 80,9 90,15 C100,11 106,4 110,5'
     },
     {
-      title: 'Sales',
-      value: 'INR 10,40,464',
-      color: '#f03b62',
-      link: '/app/dashboard?view=sales',
-      sparkline: 'M0,28 C10,20 20,14 30,20 C40,25 50,8 60,12 C70,22 80,11 90,8 C100,6 106,2 110,3'
+      title: 'Клиенты',
+      value: '13,472',
+      color: '#6a62d2',
+      link: '/app/dashboard?view=clients',
+      sparkline: 'M0,34 C10,30 20,12 30,22 C40,32 50,13 60,16 C70,22 80,8 90,12 C100,8 106,2 110,6'
+    },
+    {
+      title: 'Автоматы',
+      value: '2,046',
+      color: '#2f9ad8',
+      link: '/app/dashboard?view=machines',
+      sparkline: 'M0,30 C10,15 20,35 30,22 C40,10 50,18 60,9 C70,5 80,25 90,11 C95,7 100,4 110,8'
+    },
+    {
+      title: 'Активные автоматы',
+      value: '2,012',
+      color: '#e02cb3',
+      link: '/app/dashboard?view=active-machines',
+      sparkline: 'M0,28 C10,32 20,24 30,14 C40,8 50,25 60,19 C70,8 80,10 90,6 C100,5 106,2 110,4'
+    },
+    {
+      title: 'Неактивные автоматы',
+      value: '34',
+      color: '#ff7848',
+      link: '/app/dashboard?view=inactive-machines',
+      sparkline: 'M0,30 C10,26 20,18 30,22 C40,31 50,18 60,12 C70,6 80,24 90,15 C100,7 106,4 110,6'
     }
+
+
   ];
 
   readonly payments: PaymentItem[] = [
-    { method: 'Cash', value: 135 },
-    { method: 'UPI / Wallet', value: 84 },
-    { method: 'Debit Card', value: 61 },
-    { method: 'N/A', value: 11 },
-    { method: 'Credits', value: 23 }
+    { method: 'Наличные', value: 135 },
+    { method: 'WEB / Кошелек', value: 84 },
+    { method: 'Дебетовая карта', value: 61 },
+    { method: 'Н/Д', value: 11 },
+    { method: 'Кредиты', value: 23 }
   ];
 
   readonly operationStatus: StatusItem[] = [
-    { name: 'Online', value: 72, color: '#20b26b' },
-    { name: 'Offline', value: 14, color: '#e53935' },
-    { name: 'Down (Planned)', value: 8, color: '#f39c12' },
-    { name: 'Down', value: 4, color: '#c62828' },
-    { name: 'Standby', value: 9, color: '#5c7cfa' },
-    { name: 'Terminated', value: 2, color: '#5f6368' },
-    { name: 'N/A', value: 1, color: '#8d8d8d' }
+    { name: 'Онлайн', value: 72, color: '#20b26b' },
+    { name: 'Офлайн', value: 14, color: '#e53935' },
+    { name: 'Остановлен (планово)', value: 8, color: '#f39c12' },
+    { name: 'Остановлен', value: 4, color: '#c62828' },
+    { name: 'Ожидание', value: 9, color: '#5c7cfa' },
+    { name: 'Выведен из эксплуатации', value: 2, color: '#5f6368' },
+    { name: 'Н/Д', value: 1, color: '#8d8d8d' }
   ];
 
   readonly topProducts = signal<ProductRow[]>([
-    { name: 'Hide & Seek', price: 30, quantity: 82, amount: 6518.18, profit: 1580.3 },
-    { name: 'Lays Tangy Flavour', price: 20, quantity: 37, amount: 4754.5, profit: 1120.2 },
-    { name: 'Sprite', price: 30, quantity: 64, amount: 2559.36, profit: 740.1 },
-    { name: 'Cavins Vanilla', price: 40, quantity: 184, amount: 3680, profit: 1099.8 },
-    { name: 'Snickers', price: 20, quantity: 64, amount: 1965.81, profit: 590.2 }
+    { name: 'Вода', price: 30, quantity: 82, amount: 6518.18, profit: 1580.3 },
+    { name: 'Бутылки', price: 20, quantity: 37, amount: 4754.5, profit: 1120.2 },
+    { name: 'Лед', price: 30, quantity: 64, amount: 2559.36, profit: 740.1 },
+    { name: 'Озон', price: 40, quantity: 184, amount: 3680, profit: 1099.8 },
+    { name: 'Стаканы', price: 20, quantity: 64, amount: 1965.81, profit: 590.2 }
   ]);
 
   readonly filteredProducts = computed(() => {
@@ -201,18 +202,18 @@ export class DashboardComponent {
   readonly marginPercent = 48;
 
   readonly yearSales: YearBar[] = [
-    { label: 'Jan', value: 22000 },
-    { label: 'Feb', value: 14000 },
-    { label: 'Mar', value: 20000 },
-    { label: 'Apr', value: 21000 },
-    { label: 'May', value: 20800 },
-    { label: 'Jun', value: 12000 },
-    { label: 'Jul', value: 17000 },
-    { label: 'Aug', value: 20500 },
-    { label: 'Sep', value: 11800 },
-    { label: 'Oct', value: 22000 },
-    { label: 'Nov', value: 17000 },
-    { label: 'Dec', value: 14000 }
+    { label: 'Янв', value: 22000 },
+    { label: 'Фев', value: 14000 },
+    { label: 'Мар', value: 20000 },
+    { label: 'Апр', value: 21000 },
+    { label: 'Май', value: 20800 },
+    { label: 'Июн', value: 12000 },
+    { label: 'Июл', value: 17000 },
+    { label: 'Авг', value: 20500 },
+    { label: 'Сен', value: 11800 },
+    { label: 'Окт', value: 22000 },
+    { label: 'Ноя', value: 17000 },
+    { label: 'Дек', value: 14000 }
   ];
 
   constructor(

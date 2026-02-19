@@ -49,12 +49,12 @@ export class LoginComponent {
           this.authService.setToken(response.token);
           this.router.navigate(['/app/dashboard']);
         } else {
-          this.errorMessage.set(response.message || 'Login failed');
+          this.errorMessage.set(response.message || 'Не удалось выполнить вход');
         }
         this.isLoading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set('An error occurred. Please try again.');
+        this.errorMessage.set('Произошла ошибка. Попробуйте снова.');
         this.isLoading.set(false);
       }
     });

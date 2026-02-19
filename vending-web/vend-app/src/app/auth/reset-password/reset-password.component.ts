@@ -58,7 +58,7 @@ export class ResetPasswordComponent {
 
   onSubmit(): void {
     if (!this.resetToken()) {
-      this.errorMessage.set('Reset token is missing. Please open the reset link from your email.');
+      this.errorMessage.set('Токен сброса отсутствует. Откройте ссылку из письма.');
       return;
     }
 
@@ -76,17 +76,17 @@ export class ResetPasswordComponent {
     this.authService.resetPassword(this.resetToken() as string, password).subscribe({
       next: (response) => {
         if (response.success) {
-          this.successMessage.set(response.message || 'Password has been reset successfully');
+          this.successMessage.set(response.message || 'Пароль успешно сброшен');
           setTimeout(() => {
             this.router.navigate(['/auth/login']);
           }, 1500);
         } else {
-          this.errorMessage.set(response.message || 'Failed to reset password');
+          this.errorMessage.set(response.message || 'Не удалось сбросить пароль');
         }
         this.isLoading.set(false);
       },
       error: () => {
-        this.errorMessage.set('An error occurred. Please try again.');
+        this.errorMessage.set('Произошла ошибка. Попробуйте снова.');
         this.isLoading.set(false);
       }
     });

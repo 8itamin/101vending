@@ -42,14 +42,14 @@ export class ForgotPasswordComponent {
     this.authService.requestPasswordReset(email).subscribe({
       next: (response) => {
         if (response.success) {
-          this.successMessage.set(response.message || 'Password reset link sent to your email');
+          this.successMessage.set(response.message || 'Ссылка для сброса пароля отправлена на вашу почту');
         } else {
-          this.errorMessage.set(response.message || 'Failed to send reset link');
+          this.errorMessage.set(response.message || 'Не удалось отправить ссылку для сброса');
         }
         this.isLoading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set('An error occurred. Please try again.');
+        this.errorMessage.set('Произошла ошибка. Попробуйте снова.');
         this.isLoading.set(false);
       }
     });

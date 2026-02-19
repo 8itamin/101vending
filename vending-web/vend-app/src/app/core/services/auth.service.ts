@@ -79,7 +79,7 @@ export class AuthService {
       }
     }
 
-    return 'Request failed';
+    return 'Не удалось выполнить запрос';
   }
 
   private storage(): Storage | null {
