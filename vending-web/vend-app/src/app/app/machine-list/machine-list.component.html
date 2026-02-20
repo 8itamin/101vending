@@ -11,20 +11,20 @@
             <th>№</th>
             <th>Адрес</th>
             <th>Статус</th>
-            <th>События</th>
+            <th>Соб.</th>
             <th>Вода</th>
             <th>Тара</th>
-            <th>Продажи в мес.</th>
+            <th>Продажи</th>
             <th>Деньги</th>
             <th>Температура</th>
-            <th>Связь</th>
+            <!-- <th>Связь</th> -->
           </tr>
         </thead>
         <tbody>
           @for (row of treeRows(); track row.key) {
             @if (row.kind === 'city') {
               <tr class="group-row">
-                <td colspan="10">
+                <td colspan="9">
                   <button type="button" class="tree-toggle" (click)="toggleCity(row.cityId)">
                     <span class="tree-arrow">{{ row.expanded ? '▾' : '▸' }}</span>
                     <strong>{{ row.title }}</strong>
@@ -33,7 +33,7 @@
               </tr>
             } @else if (row.kind === 'folder') {
               <tr class="folder-row">
-                <td colspan="10">
+                <td colspan="9">
                   <button type="button" class="tree-toggle folder" (click)="toggleFolder(row.cityId, row.folderId)">
                     <span class="tree-arrow">{{ row.expanded ? '▾' : '▸' }}</span>
                     {{ row.title }}
@@ -57,9 +57,9 @@
                 <td>
                   <span class="metric-chip" [class]="toneClass(row.machine.temperatureTone)">🌡 {{ row.machine.temperatureC }}C</span>
                 </td>
-                <td>
+                <!-- <td>
                   <span class="status-mark" [class.ok]="row.machine.connected" [class.bad]="!row.machine.connected"></span>
-                </td>
+                </td> -->
               </tr>
             }
           }

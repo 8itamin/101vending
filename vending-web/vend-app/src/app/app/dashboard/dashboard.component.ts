@@ -3,6 +3,10 @@ import { Component, OnDestroy, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { MachineListComponent } from '../machine-list/machine-list.component';
+import { OrdersComponent } from '../orders/orders.component';
+import { PromotionsComponent } from '../promotions/promotions.component';
+import { RevenueComponent } from '../revenue/revenue.component';
+import { CollectionsComponent } from '../collections/collections.component';
 
 type MenuItem = {
   label: string;
@@ -53,7 +57,7 @@ type DashboardToast = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent],
+  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent, OrdersComponent, PromotionsComponent, RevenueComponent, CollectionsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -88,8 +92,8 @@ export class DashboardComponent implements OnDestroy {
       title: 'Автоматы',
       items: [
         { label: 'Список автоматов', icon: '🗂️', section: 'Список автоматов' },
-        { label: 'Активные автоматы', icon: '✅', section: 'Активные автоматы' },
-        { label: 'Неактивные автоматы', icon: '⛔', section: 'Неактивные автоматы' },
+        // { label: 'Активные автоматы', icon: '✅', section: 'Активные автоматы' },
+        // { label: 'Неактивные автоматы', icon: '⛔', section: 'Неактивные автоматы' },
         { label: 'Заказы', icon: '🛒', section: 'Заказы' },
         { label: 'Акции и купоны', icon: '🎟️', section: 'Акции и купоны' }
       ]
@@ -98,7 +102,8 @@ export class DashboardComponent implements OnDestroy {
       title: 'Финансы',
       items: [
         { label: 'Выручка', icon: '💰', section: 'Выручка' },
-        { label: 'Транзакции', icon: '💳', section: 'Транзакции' }
+        { label: 'Инкассации', icon: '💎', section: 'Инкассации' },
+        { label: 'Все транзакции', icon: '💳', section: 'Все транзакции' }
       ]
     },
     {
@@ -118,6 +123,11 @@ export class DashboardComponent implements OnDestroy {
     }
   ];
   readonly machineListSection = this.menuGroups[0].items[0].section;
+  readonly ordersSection = this.menuGroups[0].items[1].section;
+  readonly promotionsSection = this.menuGroups[0].items[2].section;
+  readonly revenueSection = this.menuGroups[1].items[0].section;
+  readonly collectionsSection = this.menuGroups[1].items[1].section;
+  readonly dashboardSection = 'Панель';
 
   readonly kpis: KpiItem[] = [
     {
@@ -271,6 +281,11 @@ export class DashboardComponent implements OnDestroy {
 
   activateSection(section: string): void {
     this.activeMenu.set(section);
+    this.mobileSidebarOpen.set(false);
+  }
+
+  openDashboard(): void {
+    this.activeMenu.set(this.dashboardSection);
     this.mobileSidebarOpen.set(false);
   }
 

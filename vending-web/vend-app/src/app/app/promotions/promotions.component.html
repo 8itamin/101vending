@@ -1,0 +1,32 @@
+<section class="promotions-panel">
+  <article class="promo-card">
+    <header class="promo-head">
+      <h2>Акции и купоны</h2>
+    </header>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Наименование</th>
+            <th>Срок действия</th>
+            <th>Покупка</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of promotions; track row.id) {
+            <tr>
+              <td>{{ row.id }}</td>
+              <td>{{ row.title }}</td>
+              <td>{{ row.period }}</td>
+              <td>
+                <button type="button" class="buy-btn" [disabled]="!row.canBuy">Купить</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
