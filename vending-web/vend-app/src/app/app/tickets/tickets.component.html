@@ -1,0 +1,75 @@
+<section class="tickets-panel">
+  <header class="tickets-head">
+    <h2>Тикеты</h2>
+    <button type="button" (click)="openCreateModal()">Создать тикет</button>
+  </header>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Дата и время</th>
+          <th>Тема</th>
+          <th>Описание</th>
+          <th>Пользователь</th>
+          <th>Статус</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.id) {
+          <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.dateTime }}</td>
+            <td>
+              <button type="button" class="topic-link" (click)="openEditModal(row.id)">
+                {{ row.topic }}
+              </button>
+            </td>
+            <td>{{ row.description }}</td>
+            <td>{{ row.user }}</td>
+            <td>{{ row.status }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (modalOpen()) {
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <section class="ticket-modal" role="dialog" aria-modal="true" aria-label="Тикет">
+      <h3>{{ editMode() ? 'Редактировать тикет' : 'Создать тикет' }}</h3>
+
+      <div class="form-grid">
+        <label>
+          Тема
+          <input type="text" [value]="draft().topic" (input)="updateDraft('topic', $any($event.target).value)" />
+        </label>
+
+        <label class="full-row">
+          Описание
+          <textarea [value]="draft().description" (input)="updateDraft('description', $any($event.target).value)"></textarea>
+        </label>
+
+        <label>
+          Пользователь
+          <input type="text" [value]="draft().user" (input)="updateDraft('user', $any($event.target).value)" />
+        </label>
+
+        <label>
+          Статус
+          <select [value]="draft().status" (change)="updateDraft('status', $any($event.target).value)">
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" (click)="saveTicket()">{{ editMode() ? 'Сохранить' : 'Создать' }}</button>
+        <button type="button" (click)="closeModal()">Закрыть</button>
+      </div>
+    </section>
+  }
+</section>

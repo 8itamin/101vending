@@ -1,5 +1,5 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Component, OnDestroy, computed, signal } from '@angular/core';
+import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { MachineListComponent } from '../machine-list/machine-list.component';
@@ -9,6 +9,10 @@ import { RevenueComponent } from '../revenue/revenue.component';
 import { CollectionsComponent } from '../collections/collections.component';
 import { AllTransactionsComponent } from '../all-transactions/all-transactions.component';
 import { CompanyComponent } from '../company/company.component';
+import { UsersComponent } from '../users/users.component';
+import { NotificationsComponent } from '../notifications/notifications.component';
+import { TicketsComponent } from '../tickets/tickets.component';
+import { NotificationsService } from '../../core/services/notifications.service';
 
 type MenuItem = {
   label: string;
@@ -59,17 +63,19 @@ type DashboardToast = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent, OrdersComponent, PromotionsComponent, RevenueComponent, CollectionsComponent, AllTransactionsComponent, CompanyComponent],
+  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent, OrdersComponent, PromotionsComponent, RevenueComponent, CollectionsComponent, AllTransactionsComponent, CompanyComponent, UsersComponent, NotificationsComponent, TicketsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnDestroy {
+  private readonly notificationsService = inject(NotificationsService);
+
   readonly isLoading = signal(true);
   readonly sidebarCollapsed = signal(false);
   readonly mobileSidebarOpen = signal(false);
   readonly profileMenuOpen = signal(false);
   readonly darkTheme = signal(false);
-  readonly notificationsCount = signal(7);
+  readonly notificationsCount = this.notificationsService.unreadCount;
   readonly activeMenu = signal('Панель');
   readonly selectedMonth = signal('Апрель 2025');
   readonly selectedSalesPeriod = signal('За год');
@@ -119,6 +125,7 @@ export class DashboardComponent implements OnDestroy {
     {
       title: 'Поддержка',
       items: [
+        { label: 'Уведомления', icon: '🔔', section: 'Уведомления' },
         { label: 'Тикеты', icon: '🎫', section: 'Тикеты' },
         { label: 'Помощь и поддержка', icon: '🛟', section: 'Помощь и поддержка' }
       ]
@@ -131,6 +138,9 @@ export class DashboardComponent implements OnDestroy {
   readonly collectionsSection = this.menuGroups[1].items[1].section;
   readonly transactionsSection = this.menuGroups[1].items[2].section;
   readonly companySection = this.menuGroups[2].items[0].section;
+  readonly usersSection = this.menuGroups[2].items[1].section;
+  readonly notificationsSection = this.menuGroups[3].items[0].section;
+  readonly ticketsSection = this.menuGroups[3].items[1].section;
   readonly dashboardSection = 'Панель';
 
   readonly kpis: KpiItem[] = [

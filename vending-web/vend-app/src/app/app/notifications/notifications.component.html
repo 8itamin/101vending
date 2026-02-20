@@ -1,0 +1,56 @@
+<section class="notifications-panel">
+  <header class="panel-head">
+    <h2>Уведомления</h2>
+    <button type="button" class="mark-all-btn" (click)="markAllRead()">
+      Прочитать все
+    </button>
+  </header>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Статус</th>
+          <th>Прочтено</th>
+          <th>Дата и время</th>
+          <th>Код</th>
+          <th>Описание</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of pagedRows(); track row.id) {
+          <tr [class.unread-row]="!row.isRead">
+            <td>{{ row.id }}</td>
+            <td>
+              <span class="status-badge" [class]="row.status">
+                {{ statusIcon(row.status) }}
+              </span>
+            </td>
+            <td>{{ row.isRead ? 'Прочтено' : 'Новое' }}</td>
+            <td>{{ row.dateTime }}</td>
+            <td>{{ row.code }}</td>
+            <td>{{ row.description }}</td>
+            <td>
+              <button
+                type="button"
+                class="read-btn"
+                [disabled]="row.isRead"
+                (click)="markRead(row.id)"
+              >
+                Прочтено
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="pager">
+    <button type="button" (click)="prevPage()" [disabled]="currentPage() === 1">Назад</button>
+    <span>Страница {{ currentPage() }} из {{ totalPages() }}</span>
+    <button type="button" (click)="nextPage()" [disabled]="currentPage() === totalPages()">Вперед</button>
+  </footer>
+</section>

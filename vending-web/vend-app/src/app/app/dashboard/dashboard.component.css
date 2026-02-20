@@ -87,6 +87,8 @@
   border: 0; background: transparent; text-align: left; color: var(--text); padding: 8px 10px;
   border-radius: 8px; cursor: pointer;
 }
+.profile-menu button:hover { background: color-mix(in srgb, var(--surface) 65%, var(--panel)); }
+.profile-menu button.active { background: color-mix(in srgb, var(--accent) 14%, var(--panel)); }
 
 
 .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px; margin-bottom: 14px; }

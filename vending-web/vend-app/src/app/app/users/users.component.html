@@ -1,0 +1,112 @@
+<section class="users-panel">
+  <header class="users-head">
+    <h2>Пользователи</h2>
+    <div class="users-actions">
+      <button type="button" (click)="createUser()">Создать</button>
+      <button type="button" (click)="deleteSelectedUsers()">Удалить пользователя</button>
+    </div>
+  </header>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Выбор</th>
+          <th>ID</th>
+          <th>ФИО</th>
+          <th>Дата рождения</th>
+          <th>Телефон</th>
+          <th>Почта</th>
+          <th>Активность</th>
+          <th>Роль</th>
+          <th>Компания</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of users(); track row.id) {
+          <tr>
+            <td class="center-cell">
+              <input
+                type="checkbox"
+                [checked]="row.selected"
+                (change)="toggleSelect(row.id, $any($event.target).checked)"
+              />
+            </td>
+            <td>{{ row.id }}</td>
+            <td>
+              <button type="button" class="link-btn" (click)="openEditUser(row.id)">{{ row.fullName }}</button>
+            </td>
+            <td>{{ row.birthDate }}</td>
+            <td>{{ row.phone }}</td>
+            <td>{{ row.email }}</td>
+            <td class="center-cell">
+              <input type="checkbox" [checked]="row.active" disabled />
+            </td>
+            <td>{{ row.role }}</td>
+            <td>{{ row.company }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9">Пользователи не найдены.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (createModalOpen()) {
+    <div class="modal-backdrop" (click)="closeCreateModal()"></div>
+    <section class="create-modal" role="dialog" aria-modal="true" aria-label="Создать пользователя">
+      <h3>{{ isEditMode() ? 'Редактировать пользователя' : 'Создать пользователя' }}</h3>
+
+      <div class="form-grid">
+        <label>
+          ФИО
+          <input type="text" [value]="draft().fullName" (input)="updateDraft('fullName', $any($event.target).value)" />
+        </label>
+
+        <label>
+          Дата рождения
+          <input type="date" [value]="draft().birthDate" (input)="updateDraft('birthDate', $any($event.target).value)" />
+        </label>
+
+        <label>
+          Телефон
+          <input type="text" [value]="draft().phone" (input)="updateDraft('phone', $any($event.target).value)" placeholder="+79261234567" />
+        </label>
+
+        <label>
+          Почта
+          <input type="email" [value]="draft().email" (input)="updateDraft('email', $any($event.target).value)" placeholder="op@mail.ru" />
+        </label>
+
+        <label>
+          Активность
+          <select [value]="draft().active ? '1' : '0'" (change)="updateDraft('active', $any($event.target).value === '1')">
+            <option value="1">Активен</option>
+            <option value="0">Неактивен</option>
+          </select>
+        </label>
+
+        <label>
+          Роль
+          <select [value]="draft().role" (change)="updateDraft('role', $any($event.target).value)">
+            @for (role of roles; track role) {
+              <option [value]="role">{{ role }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="full-row">
+          Компания
+          <input type="text" [value]="draft().company" (input)="updateDraft('company', $any($event.target).value)" />
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" (click)="saveNewUser()">{{ isEditMode() ? 'Сохранить изменения' : 'Сохранить' }}</button>
+        <button type="button" (click)="closeCreateModal()">Закрыть</button>
+      </div>
+    </section>
+  }
+</section>

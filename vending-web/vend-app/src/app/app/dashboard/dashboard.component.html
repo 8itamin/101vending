@@ -65,7 +65,8 @@
           <button type="button" class="icon-btn" (click)="toggleProfileMenu()" aria-label="Открыть меню профиля">👤</button>
           @if (profileMenuOpen()) {
             <div class="profile-menu">
-              <button type="button" (click)="activateSection('Компания')">Компания</button>
+              <button type="button" [class.active]="activeMenu() === companySection" (click)="activateSection(companySection)">Компания</button>
+              <button type="button" [class.active]="activeMenu() === usersSection" (click)="activateSection(usersSection)">Пользователи</button>
               <button type="button" (click)="logout()">Выйти</button>
             </div>
           }
@@ -98,6 +99,12 @@
         <app-all-transactions></app-all-transactions>
       } @else if (activeMenu() === companySection) {
         <app-company></app-company>
+      } @else if (activeMenu() === usersSection) {
+        <app-users></app-users>
+      } @else if (activeMenu() === notificationsSection) {
+        <app-notifications></app-notifications>
+      } @else if (activeMenu() === ticketsSection) {
+        <app-tickets></app-tickets>
       } @else {
       <section class="kpi-grid">
         @for (kpi of kpis; track trackByKpi($index, kpi)) {
