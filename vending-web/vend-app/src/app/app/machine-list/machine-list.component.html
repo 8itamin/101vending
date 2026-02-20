@@ -1,0 +1,279 @@
+<section class="machine-list-layout">
+  <article class="machines-panel">
+    <header class="panel-header">
+      <h2>Список автоматов</h2>
+    </header>
+
+    <div class="table-wrap">
+      <table class="machines-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Адрес</th>
+            <th>Статус</th>
+            <th>События</th>
+            <th>Вода</th>
+            <th>Тара</th>
+            <th>Продажи в мес.</th>
+            <th>Деньги</th>
+            <th>Температура</th>
+            <th>Связь</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of treeRows(); track row.key) {
+            @if (row.kind === 'city') {
+              <tr class="group-row">
+                <td colspan="10">
+                  <button type="button" class="tree-toggle" (click)="toggleCity(row.cityId)">
+                    <span class="tree-arrow">{{ row.expanded ? '▾' : '▸' }}</span>
+                    <strong>{{ row.title }}</strong>
+                  </button>
+                </td>
+              </tr>
+            } @else if (row.kind === 'folder') {
+              <tr class="folder-row">
+                <td colspan="10">
+                  <button type="button" class="tree-toggle folder" (click)="toggleFolder(row.cityId, row.folderId)">
+                    <span class="tree-arrow">{{ row.expanded ? '▾' : '▸' }}</span>
+                    {{ row.title }}
+                  </button>
+                </td>
+              </tr>
+            } @else {
+              <tr class="machine-row" [class.selected]="selectedMachineId() === row.machine.id" (click)="selectMachine(row.machine.id)">
+                <td>{{ row.machine.number }}</td>
+                <td class="address-cell">{{ row.machine.city }} / {{ row.machine.folder }} / {{ row.machine.address }}</td>
+                <td>
+                  <span class="status-mark" [class.ok]="row.machine.isWorking" [class.bad]="!row.machine.isWorking"></span>
+                </td>
+                <td>{{ row.machine.unreadEvents }}</td>
+                <td>
+                  <span class="metric-chip" [class]="toneClass(row.machine.waterTone)">💧 {{ row.machine.waterLiters }} л</span>
+                </td>
+                <td>{{ row.machine.bottles }}</td>
+                <td>{{ row.machine.monthlySales }}</td>
+                <td>{{ row.machine.cash | number:'1.0-0' }} ₽</td>
+                <td>
+                  <span class="metric-chip" [class]="toneClass(row.machine.temperatureTone)">🌡 {{ row.machine.temperatureC }}C</span>
+                </td>
+                <td>
+                  <span class="status-mark" [class.ok]="row.machine.connected" [class.bad]="!row.machine.connected"></span>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="details-panel">
+    @if (selectedMachine(); as machine) {
+      <header class="panel-header details-head">
+        <h2>Автомат {{ machine.number }}</h2>
+        <p>{{ machine.city }} / {{ machine.folder }} / {{ machine.address }}</p>
+      </header>
+
+      <nav class="tabs" aria-label="Разделы автомата">
+        @for (tab of tabs; track tab.id) {
+          <button type="button" [class.active]="selectedTab() === tab.id" (click)="setTab(tab.id)">
+            {{ tab.label }}
+          </button>
+        }
+      </nav>
+
+      <div class="tab-content">
+        @if (selectedTab() === 'details' && currentDetails(); as details) {
+          <div class="details-sections">
+            @for (section of details.sections; track section.id) {
+              <section class="detail-section">
+                <button type="button" class="section-toggle" (click)="toggleSection(section.id)">
+                  <span>{{ section.expanded ? '▾' : '▸' }}</span>
+                  {{ section.title }}
+                </button>
+
+                @if (section.expanded) {
+                  <table class="key-value-table">
+                    <tbody>
+                      @for (line of section.lines; track line.label) {
+                        <tr>
+                          <td>{{ line.label }}</td>
+                          <td>{{ line.value }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+              </section>
+            }
+          </div>
+        }
+
+        @if (selectedTab() === 'messages') {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Статус</th>
+                  <th>Дата и время</th>
+                  <th>Код</th>
+                  <th>Описание</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of pagedMessages(); track row.id) {
+                  <tr>
+                    <td>{{ row.id }}</td>
+                    <td>
+                      <span class="message-status" [class]="messageStatusClass(row.status)">
+                        {{ messageStatusLabel(row.status) }}
+                      </span>
+                    </td>
+                    <td>{{ row.dateTime }}</td>
+                    <td>{{ row.code }}</td>
+                    <td>{{ row.description }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <footer class="pager">
+            <button type="button" (click)="prevMessagesPage()" [disabled]="messagesPage() === 1">Назад</button>
+            <span>Страница {{ messagesPage() }} из {{ totalMessagePages() }}</span>
+            <button type="button" (click)="nextMessagesPage()" [disabled]="messagesPage() === totalMessagePages()">Вперед</button>
+          </footer>
+        }
+
+        @if (selectedTab() === 'settings' && currentDetails(); as details) {
+          <dl class="settings-grid">
+            <dt>ID</dt><dd>{{ details.settings.id }}</dd>
+            <dt>Группа</dt><dd>{{ details.settings.group }}</dd>
+            <dt>Адрес</dt><dd>{{ details.settings.address }}</dd>
+            <dt>Время работы</dt><dd>{{ details.settings.workTime }}</dd>
+            <dt>Ночной режим</dt><dd>{{ details.settings.nightMode ? 'Да' : 'Нет' }}</dd>
+            <dt>Файл прайс-листа</dt><dd>{{ details.settings.priceFile }}</dd>
+            <dt>Логотип</dt><dd>{{ details.settings.logo }}</dd>
+            <dt>Вместимость воды</dt><dd>{{ details.settings.waterCapacity }}</dd>
+            <dt>Вместимость тары</dt><dd>{{ details.settings.bottlesCapacity }}</dd>
+            <dt>Версия ПО</dt><dd>{{ details.settings.version }}</dd>
+            <dt>IP адрес</dt><dd>{{ details.settings.ip }}</dd>
+            <dt>Время на автомате</dt><dd>{{ details.settings.machineTime }}</dd>
+            <dt>Остаток гарантии</dt><dd>{{ details.settings.warranty }}</dd>
+          </dl>
+        }
+
+        @if (selectedTab() === 'files' && currentDetails(); as details) {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Имя файла</th>
+                  <th>Тип</th>
+                  <th>Размер</th>
+                  <th>Дата</th>
+                  <th>Путь</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of details.files; track row.id) {
+                  <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.type }}</td>
+                    <td>{{ row.size }}</td>
+                    <td>{{ row.date }}</td>
+                    <td>{{ row.path }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (selectedTab() === 'commands' && currentDetails(); as details) {
+          <div class="command-form">
+            <select>
+              <option>Перезагрузить контроллер</option>
+              <option>Синхронизировать время</option>
+              <option>Обновить ПО</option>
+            </select>
+            <button type="button">Отправить</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Команда</th>
+                  <th>Дата</th>
+                  <th>Пользователь</th>
+                  <th>Автомат</th>
+                  <th>Результат</th>
+                  <th>Тип команды</th>
+                  <th>Статус</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of details.commands; track row.id) {
+                  <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.command }}</td>
+                    <td>{{ row.date }}</td>
+                    <td>{{ row.user }}</td>
+                    <td>{{ row.machine }}</td>
+                    <td>{{ row.result }}</td>
+                    <td>{{ row.commandType }}</td>
+                    <td>{{ row.status }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (selectedTab() === 'addition' && currentDetails(); as details) {
+          <div class="addition-form">
+            <label>
+              Остаток воды
+              <input type="text" [value]="details.addition.waterBalance" />
+            </label>
+            <label>
+              Остаток тары
+              <input type="text" [value]="details.addition.bottlesBalance" />
+            </label>
+            <label>
+              Дата производства
+              <input type="date" [value]="details.addition.productionDate" />
+            </label>
+          </div>
+        }
+
+        @if (selectedTab() === 'software' && currentDetails(); as details) {
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Название модуля</th>
+                  <th>Серийный номер</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of details.software; track row.moduleName) {
+                  <tr>
+                    <td>{{ row.moduleName }}</td>
+                    <td>{{ row.serialNumber }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    }
+  </article>
+</section>

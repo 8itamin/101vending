@@ -2,6 +2,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { Component, OnDestroy, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { MachineListComponent } from '../machine-list/machine-list.component';
 
 type MenuItem = {
   label: string;
@@ -52,7 +53,7 @@ type DashboardToast = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, DecimalPipe],
+  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -103,8 +104,9 @@ export class DashboardComponent implements OnDestroy {
     {
       title: 'Администрирование',
       items: [
-        { label: 'Пользователи', icon: '👥', section: 'Пользователи' },
-        { label: 'Компания', icon: '🏢', section: 'Компания' }
+        { label: 'Компания', icon: '🏢', section: 'Компания' },
+        { label: 'Пользователи', icon: '👥', section: 'Пользователи' }
+        
       ]
     },
     {
@@ -115,6 +117,7 @@ export class DashboardComponent implements OnDestroy {
       ]
     }
   ];
+  readonly machineListSection = this.menuGroups[0].items[0].section;
 
   readonly kpis: KpiItem[] = [
     {

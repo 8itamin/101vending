@@ -84,6 +84,9 @@
         <div class="skeleton-block"></div>
       </section>
     } @else {
+      @if (activeMenu() === machineListSection) {
+        <app-machine-list></app-machine-list>
+      } @else {
       <section class="kpi-grid">
         @for (kpi of kpis; track trackByKpi($index, kpi)) {
           <a class="kpi-card" [routerLink]="kpi.link" [style.--kpi-color]="kpi.color">
@@ -241,6 +244,7 @@
           </div>
         </article>
       </section>
+      }
     }
   </main>
 
