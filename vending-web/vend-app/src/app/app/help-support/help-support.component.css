@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+.help-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.help-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.card-head {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-head h2 {
+  margin: 0;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+th {
+  font-size: 12px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 94%, var(--surface));
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.contacts {
+  margin: 0;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px 12px;
+}
+
+.contacts dt {
+  color: var(--muted);
+}
+
+.contacts dd {
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .help-layout {
+    grid-template-columns: 1fr;
+  }
+}

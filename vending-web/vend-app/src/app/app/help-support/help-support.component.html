@@ -1,0 +1,51 @@
+<section class="help-layout">
+  <article class="help-card">
+    <header class="card-head">
+      <h2>Документация</h2>
+    </header>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Документация</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of docs; track row.id) {
+            <tr>
+              <td>{{ row.id }}</td>
+              <td>
+                <a [href]="row.url" target="_blank" rel="noopener noreferrer">{{ row.title }}</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="help-card">
+    <header class="card-head">
+      <h2>Контакты поддержки</h2>
+    </header>
+
+    <dl class="contacts">
+      <dt>Телефон:</dt>
+      <dd>+7 (902) 559-00-71</dd>
+
+      <dt>Почта:</dt>
+      <dd>support@etalon-dv.com</dd>
+
+      <dt>Телеграмм:</dt>
+      <dd>@etalon_support</dd>
+
+      <dt>Whatsapp:</dt>
+      <dd>+7 (902) 559-00-71</dd>
+
+      <dt>Max:</dt>
+      <dd>@etalon_support_max</dd>
+    </dl>
+  </article>
+</section>
