@@ -61,6 +61,19 @@ type DashboardToast = {
   message: string;
 };
 
+type BreadcrumbItem = {
+  label: string;
+  section: string;
+};
+
+type SearchResult = {
+  id: string;
+  source: 'Список автоматов' | 'Все транзакции';
+  section: string;
+  title: string;
+  subtitle: string;
+};
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -81,6 +94,7 @@ export class DashboardComponent implements OnDestroy {
   readonly selectedMonth = signal('Апрель 2025');
   readonly selectedSalesPeriod = signal('За год');
   readonly searchQuery = signal('');
+  readonly searchFocused = signal(false);
   readonly productSortBy = signal<'amount' | 'profit' | 'quantity'>('amount');
   readonly productSortDir = signal<'asc' | 'desc'>('desc');
   readonly toasts = signal<DashboardToast[]>([]);
@@ -94,7 +108,19 @@ export class DashboardComponent implements OnDestroy {
   private toastId = 0;
   private readonly toastTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
-  readonly breadcrumb = ['Панели', 'Основная'];
+  readonly breadcrumbs = computed<BreadcrumbItem[]>(() => {
+    const dashboard = this.dashboardSection;
+    const current = this.activeMenu();
+
+    if (current === dashboard) {
+      return [{ label: dashboard, section: dashboard }];
+    }
+
+    return [
+      { label: dashboard, section: dashboard },
+      { label: current, section: current }
+    ];
+  });
 
   readonly menuGroups: { title: string; items: MenuItem[] }[] = [
     {
@@ -144,6 +170,65 @@ export class DashboardComponent implements OnDestroy {
   readonly ticketsSection = this.menuGroups[3].items[1].section;
   readonly helpSupportSection = this.menuGroups[3].items[2].section;
   readonly dashboardSection = 'Панель';
+  readonly searchIndex: SearchResult[] = [
+    {
+      id: 'm-001',
+      source: 'Список автоматов',
+      section: this.machineListSection,
+      title: 'Автомат 001',
+      subtitle: 'Санкт-Петербург / Невский пр., 10'
+    },
+    {
+      id: 'm-002',
+      source: 'Список автоматов',
+      section: this.machineListSection,
+      title: 'Автомат 002',
+      subtitle: 'Санкт-Петербург / Литейный пр., 34'
+    },
+    {
+      id: 'm-003',
+      source: 'Список автоматов',
+      section: this.machineListSection,
+      title: 'Автомат 003',
+      subtitle: 'Санкт-Петербург / ул. Есенина, 12'
+    },
+    {
+      id: 't-0001',
+      source: 'Все транзакции',
+      section: this.transactionsSection,
+      title: 'Транзакция T-0001 / Покупка',
+      subtitle: '20.02.2026 10:35:00 / +395 ₽'
+    },
+    {
+      id: 't-0002',
+      source: 'Все транзакции',
+      section: this.transactionsSection,
+      title: 'Транзакция T-0002 / Инкассация',
+      subtitle: '20.02.2026 09:55:00 / -780 ₽'
+    },
+    {
+      id: 't-0003',
+      source: 'Все транзакции',
+      section: this.transactionsSection,
+      title: 'Транзакция T-0003 / Корректировка',
+      subtitle: '20.02.2026 09:15:00 / -300 ₽'
+    }
+  ];
+
+  readonly searchResults = computed(() => {
+    const query = this.searchQuery().trim().toLowerCase();
+    if (!query) return [];
+
+    return this.searchIndex
+      .filter((item) =>
+        `${item.title} ${item.subtitle} ${item.source}`.toLowerCase().includes(query)
+      )
+      .slice(0, 5);
+  });
+
+  readonly showSearchDropdown = computed(() =>
+    this.searchFocused() && this.searchQuery().trim().length > 0 && this.searchResults().length > 0
+  );
 
   readonly kpis: KpiItem[] = [
     {
@@ -295,6 +380,20 @@ export class DashboardComponent implements OnDestroy {
     this.searchQuery.set(query);
   }
 
+  onSearchFocus(): void {
+    this.searchFocused.set(true);
+  }
+
+  onSearchBlur(): void {
+    setTimeout(() => this.searchFocused.set(false), 120);
+  }
+
+  selectSearchResult(item: SearchResult): void {
+    this.searchQuery.set(item.title);
+    this.activateSection(item.section);
+    this.searchFocused.set(false);
+  }
+
   activateSection(section: string): void {
     this.activeMenu.set(section);
     this.mobileSidebarOpen.set(false);
@@ -303,6 +402,10 @@ export class DashboardComponent implements OnDestroy {
   openDashboard(): void {
     this.activeMenu.set(this.dashboardSection);
     this.mobileSidebarOpen.set(false);
+  }
+
+  navigateByBreadcrumb(section: string): void {
+    this.activateSection(section);
   }
 
   sortProducts(by: 'amount' | 'profit' | 'quantity'): void {

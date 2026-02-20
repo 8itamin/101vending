@@ -37,22 +37,43 @@
       <div class="topbar-left">
         <button type="button" class="icon-btn mobile-only" (click)="toggleMobileSidebar()" aria-label="Открыть меню">☰</button>
         <div class="breadcrumbs">
-          @for (crumb of breadcrumb; track crumb) {
-            <span class="crumb">{{ crumb }}</span>
+          @for (crumb of breadcrumbs(); track crumb.label) {
+            <button
+              type="button"
+              class="crumb"
+              [class.active]="activeMenu() === crumb.section"
+              (click)="navigateByBreadcrumb(crumb.section)"
+            >
+              {{ crumb.label }}
+            </button>
           }
         </div>
       </div>
 
       <div class="topbar-right">
-        <label class="search-field" aria-label="Глобальный поиск">
-          <span class="search-mark">🔍</span>
-          <input
-            type="search"
-            placeholder="Поиск автоматов, товаров, транзакций"
-            [value]="searchQuery()"
-            (input)="setSearch($any($event.target).value)"
-          />
-        </label>
+        <div class="search-wrap">
+          <label class="search-field" aria-label="Глобальный поиск">
+            <span class="search-mark">🔍</span>
+            <input
+              type="search"
+              placeholder="Поиск автоматов, товаров, транзакций"
+              [value]="searchQuery()"
+              (input)="setSearch($any($event.target).value)"
+              (focus)="onSearchFocus()"
+              (blur)="onSearchBlur()"
+            />
+          </label>
+          @if (showSearchDropdown()) {
+            <section class="search-dropdown">
+              @for (item of searchResults(); track item.id) {
+                <button type="button" class="search-result" (click)="selectSearchResult(item)">
+                  <strong>{{ item.title }}</strong>
+                  <small>{{ item.source }} · {{ item.subtitle }}</small>
+                </button>
+              }
+            </section>
+          }
+        </div>
 
         <button type="button" class="icon-btn" (click)="toggleTheme()" aria-label="Переключить тему">{{ darkTheme() ? '☀️' : '🌙' }}</button>
 
