@@ -7,6 +7,8 @@ import { OrdersComponent } from '../orders/orders.component';
 import { PromotionsComponent } from '../promotions/promotions.component';
 import { RevenueComponent } from '../revenue/revenue.component';
 import { CollectionsComponent } from '../collections/collections.component';
+import { AllTransactionsComponent } from '../all-transactions/all-transactions.component';
+import { CompanyComponent } from '../company/company.component';
 
 type MenuItem = {
   label: string;
@@ -57,7 +59,7 @@ type DashboardToast = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent, OrdersComponent, PromotionsComponent, RevenueComponent, CollectionsComponent],
+  imports: [CommonModule, RouterLink, DecimalPipe, MachineListComponent, OrdersComponent, PromotionsComponent, RevenueComponent, CollectionsComponent, AllTransactionsComponent, CompanyComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -127,6 +129,8 @@ export class DashboardComponent implements OnDestroy {
   readonly promotionsSection = this.menuGroups[0].items[2].section;
   readonly revenueSection = this.menuGroups[1].items[0].section;
   readonly collectionsSection = this.menuGroups[1].items[1].section;
+  readonly transactionsSection = this.menuGroups[1].items[2].section;
+  readonly companySection = this.menuGroups[2].items[0].section;
   readonly dashboardSection = 'Панель';
 
   readonly kpis: KpiItem[] = [

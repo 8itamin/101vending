@@ -94,6 +94,10 @@
         <app-revenue></app-revenue>
       } @else if (activeMenu() === collectionsSection) {
         <app-collections></app-collections>
+      } @else if (activeMenu() === transactionsSection) {
+        <app-all-transactions></app-all-transactions>
+      } @else if (activeMenu() === companySection) {
+        <app-company></app-company>
       } @else {
       <section class="kpi-grid">
         @for (kpi of kpis; track trackByKpi($index, kpi)) {

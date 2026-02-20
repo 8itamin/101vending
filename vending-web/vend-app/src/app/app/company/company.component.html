@@ -1,0 +1,135 @@
+<section class="company-layout">
+  <article class="company-card">
+    <header class="card-head">
+      <h2>Данные о компании</h2>
+    </header>
+
+    <div class="form-grid">
+      <label>
+        ID
+        <input class="readonly-field" type="text" [value]="form().id" readonly />
+      </label>
+
+      <label>
+        ИНН
+        <input type="text" [value]="form().inn" (input)="updateField('inn', $any($event.target).value)" />
+      </label>
+
+      <label>
+        Наименование
+        <input type="text" [value]="form().name" (input)="updateField('name', $any($event.target).value)" />
+      </label>
+
+      <label class="full-row">
+        Адрес
+        <input type="text" [value]="form().address" (input)="updateField('address', $any($event.target).value)" />
+      </label>
+
+      <label>
+        Телефон
+        <input type="text" [value]="phoneDisplay()" (input)="onPhoneInput($any($event.target).value)" />
+      </label>
+
+      <label>
+        Телеграм для уведомлений
+        <input type="text" [value]="form().telegram" (input)="updateField('telegram', $any($event.target).value)" />
+      </label>
+
+      <label>
+        Почта
+        <input type="email" [value]="form().email" (input)="updateField('email', $any($event.target).value)" />
+      </label>
+
+    </div>
+
+    <footer class="card-foot">
+      <button type="button" class="save-btn" (click)="saveCompany()">Сохранить</button>
+      @if (saveMessage()) {
+        <span class="save-note">{{ saveMessage() }}</span>
+      }
+    </footer>
+  </article>
+
+  <article class="company-card">
+    <header class="card-head split">
+      <h2>Доступные автоматы</h2>
+      <div class="actions">
+        <button type="button" (click)="openConnectModal()">Подключить автомат</button>
+        <button type="button" (click)="orderMachineLicense()">Заказать лицензию на автомат</button>
+        <button type="button" (click)="orderSoftwareLicense()">Заказать лицензию на ПО</button>
+      </div>
+    </header>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="status-cell">Статус</th>
+            <th>ID</th>
+            <th>Наименование</th>
+            <th>Адрес автомата</th>
+            <th>Компания</th>
+            <th>Версия</th>
+            <th>Лицензия автомата</th>
+            <th>Лицензия на ПО</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of pagedMachines(); track row.id) {
+            <tr>
+              <td class="status-cell">
+                <span class="state-dot" [class]="statusClass(row.statusOnline)"></span>
+              </td>
+              <td>{{ row.id }}</td>
+              <td>{{ row.name }}</td>
+              <td>{{ row.address }}</td>
+              <td>{{ row.company }}</td>
+              <td>{{ row.version }}</td>
+              <td>
+                <span class="license-chip" [class]="statusClass(row.machineLicense.active)">
+                  {{ row.machineLicense.id }} / {{ row.machineLicense.term }}
+                </span>
+              </td>
+              <td>
+                <span class="license-chip" [class]="statusClass(row.softwareLicense.active)">
+                  {{ row.softwareLicense.id }} / {{ row.softwareLicense.term }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="pager">
+      <button type="button" (click)="prevPage()" [disabled]="currentPage() === 1">Назад</button>
+      <span>Страница {{ currentPage() }} из {{ totalPages() }}</span>
+      <button type="button" (click)="nextPage()" [disabled]="currentPage() === totalPages()">Вперед</button>
+    </footer>
+  </article>
+
+  @if (connectModalOpen()) {
+    <div class="modal-backdrop" (click)="closeConnectModal()"></div>
+    <section class="connect-modal" role="dialog" aria-modal="true" aria-label="Подключить автомат">
+      <h3>Введите код конфигурации автомата</h3>
+      <input
+        type="text"
+        class="config-input"
+        [value]="configurationCode()"
+        (input)="setConfigurationCode($any($event.target).value)"
+      />
+      <div class="modal-actions">
+        <button type="button" (click)="connectMachine()">Подключить</button>
+        <button type="button" (click)="closeConnectModal()">Закрыть</button>
+      </div>
+    </section>
+  }
+
+  @if (connectToast()) {
+    <section class="toast-stack" aria-live="polite" aria-atomic="true">
+      <article class="toast success">
+        <span>✅ {{ connectToast() }}</span>
+      </article>
+    </section>
+  }
+</section>
